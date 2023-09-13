@@ -1,3 +1,4 @@
+# Importar librerias
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import seaborn as sns
@@ -7,13 +8,14 @@ from sklearn.impute import SimpleImputer
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import cross_val_predict, cross_val_score, cross_validate
 
-
+# Función bloxplots
 def plot_box_plots(dataframe, columns):
     for column in columns:
         dataframe[column].plot(kind='box', figsize=(5, 5))
         plt.title(f'Box Plot of {column}')
         plt.show()
 
+# Función diagrama de barras
 def bp(data_x, data_y, x_label, y_label, title):
     plt.figure(figsize=(10, 6))
     sns.boxplot(x=data_x, y=data_y)
@@ -22,7 +24,7 @@ def bp(data_x, data_y, x_label, y_label, title):
     plt.title(title)
     plt.show()
 
-
+# Función diagrama de barras variables categoricas
 def plot_category_counts(data, column_name):
     counts = data[column_name].value_counts()
     m = pd.DataFrame({column_name: counts.index, 'Count': counts.values})
@@ -30,6 +32,7 @@ def plot_category_counts(data, column_name):
     sns.barplot(data=m, y=column_name, x='Count')
     plt.show()
 
+# Función histograma
 def plot_travel_frequency(data, target, xlabel, ylabel, title):
     sns.countplot(x=data, hue=target)
     plt.xlabel(xlabel)
@@ -37,6 +40,7 @@ def plot_travel_frequency(data, target, xlabel, ylabel, title):
     plt.title(title)
     plt.show()
 
+# Función imputar datos
 def imputar_f (df,list_cat):  
     df_c=df[list_cat]
     df_n=df.loc[:,~df.columns.isin(list_cat)]
@@ -51,6 +55,7 @@ def imputar_f (df,list_cat):
     df =pd.concat([df_n,df_c],axis=1)
     return df
 
+# Función cambiar formato a tiempo
 def convertir_a_tiempo(df):
     # Convertir las columnas a datetime
     for column in df.columns:
@@ -61,8 +66,7 @@ def convertir_a_tiempo(df):
             df[column] = df[column].dt.strftime('%H:%M')
     return df
 
-# Crear una función para calcular la diferencia en minutos 
-
+# Función para calcular la diferencia en minutos 
 def calcular_diferencia(hora1, hora2):
     if pd.notnull(hora1) and pd.notnull(hora2):
         try:
@@ -74,13 +78,14 @@ def calcular_diferencia(hora1, hora2):
     else:
         return None
     
-
+# Función para varianza en VarianceThreshold
 def selector(trsh,df):
     selector = VarianceThreshold(threshold=trsh)
     num_fil = pd.DataFrame(selector.fit_transform(df), columns=df.columns[selector.get_support()])
     num2=num_fil
     return num2
-    
+
+# Función regularizar variables     
 def scalador(mc_num):
     # MinMaxScaler
     sca = MinMaxScaler()
@@ -89,6 +94,7 @@ def scalador(mc_num):
     x_sc_df = pd.DataFrame(x_sc, columns=mc_num.columns)
     return x_sc_df
 
+# Función metricas
 def medir_modelos(modelos,scoring,X,y,cv):
     metric_modelos=pd.DataFrame()
     for modelo in modelos:
